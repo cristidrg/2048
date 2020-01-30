@@ -15,14 +15,17 @@ class GameUpdated implements ShouldBroadcast
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
     public $blocks;
+    public $gameOver;
+
     /**
      * Create a new event instance.
      *
      * @return void
      */
-    public function __construct($blocks)
+    public function __construct($blocks, $gameOver = false)
     {
         $this->blocks = $blocks;
+        $this->gameOver = $gameOver;
     }
 
     /**

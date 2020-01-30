@@ -32,27 +32,56 @@ class GameController extends Controller
     public function switchLeft($startingGrid)
     {
         $grid = $startingGrid;
+
         for ($row = 0; $row < 6; $row++) {
             for ($column = 0; $column < 6; $column++) {
                 if ($grid[$row][$column]["value"] != 0) {
                     $columnCopy = $column - 1;
-                    $count = 0;
                     while ($columnCopy > -1) {
                         if ($grid[$row][$columnCopy]["value"] == 0) {
                             $temp = $grid[$row][$columnCopy + 1];
                             $grid[$row][$columnCopy + 1] = $grid[$row][$columnCopy];
                             $grid[$row][$columnCopy] = $temp;
-                        } else {
-
+                        } else if ($grid[$row][$columnCopy]["value"] == $grid[$row][$columnCopy + 1]["value"]){
+                            $grid[$row][$columnCopy]["value"] = $grid[$row][$columnCopy]["value"] * 2;
+                            $grid[$row][$columnCopy + 1]["value"] = 0;
                         }
                         $columnCopy = $columnCopy - 1;
-                        $count = $count + 1;
                     }
                 }
             }
         }
 
         return $grid;
+    }
+
+    public function addNewBlock($startingGrid)
+    {
+        $gridIsFull = true;
+        $grid = $startingGrid;
+        $rows = [0,1,2,3,4,5];
+        $columns = [0,1,2,3,4,5];
+        shuffle($rows);
+        shuffle($columns);
+        
+        foreach($rows as $row) {
+            foreach($columns as $column) {
+                if ($grid[$column][$row]["value"] == 0) {
+                    $gridIsFull = false;
+                    $grid[$column][$row]["value"] = 1;
+
+                    return [
+                        "grid" => $grid,
+                        "gridIsFull" => $gridIsFull
+                    ];
+                }
+            }
+        }
+
+        return [
+            "grid" => $grid,
+            "gameOver" => $gameOver
+        ];
     }
 
     public function handleMovement($game, $command)
@@ -69,7 +98,11 @@ class GameController extends Controller
         switch($command) {
             case 'left': {$grid = $this->switchLeft($grid); break;}
         }
+
+        $newState = $this->addNewBlock($grid);
         
+        $grid = $newState['grid'];
+
         DB::beginTransaction();
             for ($row = 0; $row < 6; $row++) {
                 for ($column = 0; $column < 6; $column++) {
@@ -85,7 +118,7 @@ class GameController extends Controller
             }
         DB::commit();
         
-        GameUpdated::dispatch($game->blocks);
+        GameUpdated::dispatch($game->blocks, $newState['gridIsFull']);
 
         return Response::json(array(
             'success' => true,
