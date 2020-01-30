@@ -3,12 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Game;
+use App\Message;
 use App\GridHelper;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Response;
 use App\Events\GameUpdated;
+use App\Events\BroadcastMessageCreation;
 
 class GameController extends Controller
 {
@@ -74,6 +76,37 @@ class GameController extends Controller
         )); 
     }
 
+    public function executeCommand($id, $command)
+    {
+        $game = Game::where('id', $id)->first();
+
+        switch($command) {
+            case 'restart': return $this->restartGame($game);
+            case 'left':
+            case 'right':
+            case 'bottom':
+            case 'top': 
+                return $this->handleMovement($game, $command);
+        }
+
+        return Response::json(array(
+            'success' => false,
+            'error' => 'Command ' . $command . ' is not available'
+        )); 
+    }
+
+    public function receiveMessage(int $id)
+    {
+        request()->validate([
+            'content'=>'required',
+        ]);
+
+        $message = Message::create(request(['content']));
+        
+        BroadcastMessageCreation::dispatch($message);
+        return $this->executeCommand($id, request('content'));
+    }
+
     public function handleCommand(int $id)
     {   
         request()->validate([
@@ -83,15 +116,6 @@ class GameController extends Controller
             ]
         ]);
 
-        $game = Game::where('id', $id)->first();
-
-        switch(request('command')) {
-            case 'restart': return $this->restartGame($game);
-            case 'left':
-            case 'right':
-            case 'bottom':
-            case 'top': 
-                return $this->handleMovement($game, request('command'));
-        }
+        return $this->executeCommand($id, request('command'));
     }
 }

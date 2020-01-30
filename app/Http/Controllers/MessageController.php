@@ -20,6 +20,7 @@ class MessageController extends Controller
             'content'=>'required',
         ]);
         $message = Message::create(request(['content']));
+        
         BroadcastMessageCreation::dispatch($message);
     }
 }

@@ -36,7 +36,7 @@ export default {
       sendMessage(e) {
         this.isPostingMessage = true;
         
-        axios.post('/api/message/', {
+        axios.post('/api/game/1/message', {
           csrf: this.csrf,
           content: this.newMessage 
         })

@@ -1999,7 +1999,7 @@ __webpack_require__.r(__webpack_exports__);
       var _this2 = this;
 
       this.isPostingMessage = true;
-      axios.post('/api/message/', {
+      axios.post('/api/game/1/message', {
         csrf: this.csrf,
         content: this.newMessage
       }).then(function (success) {

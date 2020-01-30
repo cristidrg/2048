@@ -18,10 +18,9 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::resource('/api/message', 'MessageController');
 
 Route::get('/api/game/{id}', function($id) {
     return new GameResource(Game::where('id', $id)->first());
 });
-
+Route::post('/api/game/{id}/message', 'GameController@receiveMessage');
 Route::post('/api/game/{id}', 'GameController@handleCommand');
