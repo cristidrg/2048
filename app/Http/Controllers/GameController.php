@@ -14,16 +14,31 @@ use App\Events\BroadcastMessageCreation;
 
 class GameController extends Controller
 {
-    public function restartGame(Game $game)
+    private function restartGame(Game $game)
     {
         foreach ($game->blocks as $block) {
             $block->value = 0;
             $block->save();
         }
 
-        $startingBlock = rand(0, 35);
-        $game->blocks[$startingBlock]->value = 2;
-        $game->blocks[$startingBlock]->save();
+        $setObstacles = 0;
+        while ($setObstacles < $game->obstacleCount) {
+            $obstacleIndex = rand(0, 35);
+            if ($game->blocks[$obstacleIndex]->value == 0) {
+                $game->blocks[$obstacleIndex]->value = -1;
+                $game->blocks[$obstacleIndex]->save();
+                $setObstacles = $setObstacles + 1;
+            }
+        }
+
+        while (true) {
+            $startingBlock = rand(0, 35);
+            if ($game->blocks[$startingBlock]->value == 0) {
+                $game->blocks[$startingBlock]->value = 1;
+                $game->blocks[$startingBlock]->save();
+                break;
+            }
+        }
 
         GameUpdated::dispatch($game->blocks);
 
@@ -32,7 +47,7 @@ class GameController extends Controller
         )); 
     }
 
-    public function handleMovement($game, $command)
+    private function handleMovement($game, $command)
     {
         $grid = array_fill(0, 6, array_fill(0, 6,0));
 
@@ -76,9 +91,15 @@ class GameController extends Controller
         )); 
     }
 
-    public function executeCommand($id, $command)
+    private function executeCommand($id, $command)
     {
         $game = Game::where('id', $id)->first();
+
+        if ($game == null) {
+            return Response::json(array(
+                'error' => 'Game id ' . $id . ' is not existent'
+            ));
+        }
 
         switch($command) {
             case 'restart': return $this->restartGame($game);
@@ -90,9 +111,29 @@ class GameController extends Controller
         }
 
         return Response::json(array(
-            'success' => false,
             'error' => 'Command ' . $command . ' is not available'
         )); 
+    }
+
+    public function setObstacles(int $id)
+    {
+        request()->validate([
+            'numberOfObstacles'=>'required|min:1|max:4',
+        ]);
+
+        $game = Game::where('id', $id)->first();
+
+        if ($game == null) {
+            return Response::json(array(
+                'error' => 'Game id ' . $id . ' is not existent'
+            ));
+        }
+
+        $game->obstacleCount = request('numberOfObstacles');
+
+        return Response::json(array(
+            'success' => true
+        ));
     }
 
     public function receiveMessage(int $id)

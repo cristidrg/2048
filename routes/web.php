@@ -23,4 +23,5 @@ Route::get('/api/game/{id}', function($id) {
     return new GameResource(Game::where('id', $id)->first());
 });
 Route::post('/api/game/{id}/message', 'GameController@receiveMessage');
-Route::post('/api/game/{id}', 'GameController@handleCommand');
+Route::post('/api/game/{id}/setObstacles', 'GameController@setObstacles');
+Route::post('/api/game/{id}/commands', 'GameController@handleCommand');

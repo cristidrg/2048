@@ -20,7 +20,7 @@ export default {
   }),
   methods: {
     restartGame(e) {
-      axios.post('/api/game/1', {
+      axios.post('/api/game/1/commands', {
         command: 'restart',
         csrf: this.csrf
       }).then(res => res);

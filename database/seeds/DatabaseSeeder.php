@@ -14,7 +14,7 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        $game = Game::create();
+        $game1 = Game::create();
 
         for ($i = 0; $i < 6; $i++) {
             for( $j = 0; $j < 6; $j++) {
@@ -23,7 +23,7 @@ class DatabaseSeeder extends Seeder
                     'column' => $j,
                     'value' => 0
                 ]);
-                $game->blocks()->save($block);
+                $game1->blocks()->save($block);
             }
         }
     }

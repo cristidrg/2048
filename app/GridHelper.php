@@ -39,7 +39,7 @@ class GridHelper
 
         for ($row = 0; $row < 6; $row++) {
             for ($column = 0; $column < 6; $column++) {
-                if ($grid[$row][$column]["value"] != 0) {
+                if ($grid[$row][$column]["value"] > 0) {
                     $columnCopy = $column - 1;
                     while ($columnCopy > -1) {
                         if ($grid[$row][$columnCopy]["value"] == 0) {
@@ -65,10 +65,8 @@ class GridHelper
 
         for ($row = 5; $row > -1; $row--) {
             for ($column = 5; $column > -1; $column--) {
-                if ($grid[$row][$column]["value"] != 0) {
-
+                if ($grid[$row][$column]["value"] > 0) {
                     $columnCopy = $column + 1;
-
                     while ($columnCopy < 6) {
                         if ($grid[$row][$columnCopy]["value"] == 0) {
                             $temp = $grid[$row][$columnCopy - 1];
@@ -92,7 +90,7 @@ class GridHelper
         $grid = $startingGrid;
         for ($column = 5; $column > -1; $column--) {
             for ($row = 5; $row > -1; $row--) {
-                if ($grid[$row][$column]["value"] != 0) {
+                if ($grid[$row][$column]["value"] > 0) {
                     $rowCopy = $row + 1;
                     while ($rowCopy < 6) {
                         if ($grid[$rowCopy][$column]["value"] == 0) {
@@ -117,7 +115,7 @@ class GridHelper
         $grid = $startingGrid;
         for ($column = 0; $column < 6; $column++) {
             for ($row = 0; $row < 6; $row++) {
-                if ($grid[$row][$column]["value"] != 0) {
+                if ($grid[$row][$column]["value"] > 0) {
                     $rowCopy = $row - 1;
                     while ($rowCopy > -1) {
                         if ($grid[$rowCopy][$column]["value"] == 0) {
