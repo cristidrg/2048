@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Game;
+use App\GridHelper;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\DB;
@@ -29,61 +30,6 @@ class GameController extends Controller
         )); 
     }
 
-    public function switchLeft($startingGrid)
-    {
-        $grid = $startingGrid;
-
-        for ($row = 0; $row < 6; $row++) {
-            for ($column = 0; $column < 6; $column++) {
-                if ($grid[$row][$column]["value"] != 0) {
-                    $columnCopy = $column - 1;
-                    while ($columnCopy > -1) {
-                        if ($grid[$row][$columnCopy]["value"] == 0) {
-                            $temp = $grid[$row][$columnCopy + 1];
-                            $grid[$row][$columnCopy + 1] = $grid[$row][$columnCopy];
-                            $grid[$row][$columnCopy] = $temp;
-                        } else if ($grid[$row][$columnCopy]["value"] == $grid[$row][$columnCopy + 1]["value"]){
-                            $grid[$row][$columnCopy]["value"] = $grid[$row][$columnCopy]["value"] * 2;
-                            $grid[$row][$columnCopy + 1]["value"] = 0;
-                        }
-                        $columnCopy = $columnCopy - 1;
-                    }
-                }
-            }
-        }
-
-        return $grid;
-    }
-
-    public function addNewBlock($startingGrid)
-    {
-        $gridIsFull = true;
-        $grid = $startingGrid;
-        $rows = [0,1,2,3,4,5];
-        $columns = [0,1,2,3,4,5];
-        shuffle($rows);
-        shuffle($columns);
-        
-        foreach($rows as $row) {
-            foreach($columns as $column) {
-                if ($grid[$column][$row]["value"] == 0) {
-                    $gridIsFull = false;
-                    $grid[$column][$row]["value"] = 1;
-
-                    return [
-                        "grid" => $grid,
-                        "gridIsFull" => $gridIsFull
-                    ];
-                }
-            }
-        }
-
-        return [
-            "grid" => $grid,
-            "gameOver" => $gameOver
-        ];
-    }
-
     public function handleMovement($game, $command)
     {
         $grid = array_fill(0, 6, array_fill(0, 6,0));
@@ -96,10 +42,13 @@ class GameController extends Controller
         }
 
         switch($command) {
-            case 'left': {$grid = $this->switchLeft($grid); break;}
+            case 'left': {$grid = GridHelper::switchLeft($grid); break;}
+            case 'right': {$grid = GridHelper::switchRight($grid); break;}
+            case 'bottom': {$grid = GridHelper::switchBottom($grid); break;}
+            case 'top': {$grid = GridHelper::switchTop($grid); break;}
         }
 
-        $newState = $this->addNewBlock($grid);
+        $newState = GridHelper::addNewBlock($grid);
         
         $grid = $newState['grid'];
 
@@ -138,7 +87,11 @@ class GameController extends Controller
 
         switch(request('command')) {
             case 'restart': return $this->restartGame($game);
-            case 'left': return $this->handleMovement($game, request('command'));
+            case 'left':
+            case 'right':
+            case 'bottom':
+            case 'top': 
+                return $this->handleMovement($game, request('command'));
         }
     }
 }
