@@ -30,7 +30,7 @@ export default {
         command: 'restart',
         csrf: this.csrf
       }).then(res => res);
-    } 
+    }
   },
   components: {
     Chat,

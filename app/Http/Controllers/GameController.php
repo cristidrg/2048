@@ -53,8 +53,9 @@ class GameController extends Controller
 
         foreach ($game->blocks as $block) {
             $grid[$block->row][$block->column] = [
+                "id" => $block->id,
+                "canMerge" => true,
                 "value" => $block->value,
-                "id" => $block->id
             ];
         }
 

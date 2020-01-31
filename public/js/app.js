@@ -42023,6 +42023,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _vue_App_vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../vue/App.vue */ "./resources/vue/App.vue");
 __webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
 
+__webpack_require__(/*! ./debugging */ "./resources/js/debugging.js");
+
 window.Vue = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.common.js");
 
 var app = new Vue({
@@ -42069,6 +42071,40 @@ window.Echo = new laravel_echo__WEBPACK_IMPORTED_MODULE_0__["default"]({
   key: "de23a4cc7cd4c1042f7e",
   cluster: "eu",
   forceTLS: true
+});
+
+/***/ }),
+
+/***/ "./resources/js/debugging.js":
+/*!***********************************!*\
+  !*** ./resources/js/debugging.js ***!
+  \***********************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+window.csrf = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
+var triggerMovement = function triggerMovement(type) {
+  return axios.post('/api/game/1/message', {
+    csrf: window.csrf,
+    content: type
+  })["catch"](function (err) {
+    return alert(err);
+  });
+};
+
+window.addEventListener('keyup', function (e) {
+  if (document.activeElement && document.activeElement.getAttribute("name") != "input") {
+    if (event.keyCode == 37) {
+      triggerMovement('left');
+    } else if (event.keyCode == 38) {
+      triggerMovement('top');
+    } else if (event.keyCode == 39) {
+      triggerMovement('right');
+    } else if (event.keyCode == 40) {
+      triggerMovement('bottom');
+    }
+  }
 });
 
 /***/ }),
