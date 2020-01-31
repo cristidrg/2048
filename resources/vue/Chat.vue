@@ -1,7 +1,7 @@
 <template>
-  <div class="flex flex-col flex-grow w-full h-64 mb-8 desktop:pl-12 desktop:h-84 desktop:w-full">
+  <div class="flex flex-col flex-grow w-full h-64 mb-8 desktop:flex-grow-0 desktop:mb-0 desktop:pl-12 desktop:h-88 desktop:w-72">
     <div class="flex flex-col items-start flex-grow w-full px-2 pb-3 mt-2 overflow-y-auto desktop:px-6 bg-backgroundDark">
-      <div class="inline-block max-w-full py-1 pl-2 pr-4 mt-2 text-sm font-bold text-white break-words rounded-lg desktop:mt-3 desktop:pr-8 desktop:pl-4 desktop:py-2 bg-primary" v-for="(message, index) in messages" :key="index">
+      <div class="inline-block max-w-full py-1 pl-2 pr-4 mt-2 text-sm font-bold text-white break-words rounded-lg desktop:mt-3 desktop:pr-8 desktop:pl-4 desktop:py-2 bg-block2" v-for="(message, index) in messages" :key="index">
           {{message}}
       </div>
     </div>

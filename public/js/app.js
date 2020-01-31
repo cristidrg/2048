@@ -1927,6 +1927,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 
 
 
@@ -2055,6 +2056,19 @@ var defaultState = [0, 1, 2, 3, 4, 5].map(function (entry) {
     };
   },
   methods: {
+    getBlockClass: function getBlockClass(value) {
+      var backgroundColor = "bg-empty";
+
+      if (value == 1) {
+        backgroundColor = "bg-primary";
+      } else if (value > 1) {
+        backgroundColor = "bg-block".concat(value);
+      } else if (value == -1) {
+        backgroundColor = "bg-obstacle";
+      }
+
+      return backgroundColor;
+    },
     mapBlocksToState: function mapBlocksToState(blocks) {
       return blocks.reduce(function (acc, _ref) {
         var row = _ref.row,
@@ -29574,21 +29588,29 @@ var render = function() {
       "div",
       {
         staticClass:
-          "flex flex-col items-center items-end h-full mx-auto w-70 desktop:justify-center desktop:flex-row"
+          "flex flex-col items-center items-end h-full mx-auto w-70 tablet:w-84 tablet:justify-center tablet:flex-wrap desktop:items-start desktop:w-11/12 desktop:flex-row desktop:content-start"
       },
       [
         _c(
           "div",
-          { staticClass: "flex items-center w-full" },
+          {
+            staticClass:
+              "flex items-center w-full mt-8 desktop:justify-center desktop:flex desktop:flex-wrap desktop:h-16 desktop:mb-16"
+          },
           [
-            _c("h1", { staticClass: "font-black text-primary" }, [
-              _vm._v("2048 V7")
-            ]),
+            _c(
+              "h1",
+              {
+                staticClass:
+                  "font-black text-center text-black desktop:text-3xl desktop:w-full"
+              },
+              [_vm._v("2048 V7")]
+            ),
             _vm._v(" "),
             _c(
               "form",
               {
-                staticClass: "ml-auto",
+                staticClass: "ml-auto desktop:ml-0 ",
                 attrs: { method: "post", action: "/api/message/" },
                 on: {
                   submit: function($event) {
@@ -29602,7 +29624,7 @@ var render = function() {
                   "button",
                   {
                     staticClass:
-                      "px-4 py-1 mt-2 mb-2 ml-auto mr-2 text-xs font-bold text-white uppercase rounded-lg bg-primary",
+                      "px-4 py-1 mt-2 mb-2 ml-auto mr-2 text-xs font-bold text-black uppercase bg-white rounded-lg",
                     attrs: { type: "submit" }
                   },
                   [_vm._v("New game")]
@@ -29649,7 +29671,7 @@ var render = function() {
     "div",
     {
       staticClass:
-        "flex flex-col flex-grow w-full h-64 mb-8 desktop:pl-12 desktop:h-84 desktop:w-full"
+        "flex flex-col flex-grow w-full h-64 mb-8 desktop:flex-grow-0 desktop:mb-0 desktop:pl-12 desktop:h-88 desktop:w-72"
     },
     [
       _c(
@@ -29664,7 +29686,7 @@ var render = function() {
             {
               key: index,
               staticClass:
-                "inline-block max-w-full py-1 pl-2 pr-4 mt-2 text-sm font-bold text-white break-words rounded-lg desktop:mt-3 desktop:pr-8 desktop:pl-4 desktop:py-2 bg-primary"
+                "inline-block max-w-full py-1 pl-2 pr-4 mt-2 text-sm font-bold text-white break-words rounded-lg desktop:mt-3 desktop:pr-8 desktop:pl-4 desktop:py-2 bg-block2"
             },
             [_vm._v("\n        " + _vm._s(message) + "\n    ")]
           )
@@ -29742,8 +29764,7 @@ var render = function() {
   return _c(
     "svg",
     {
-      staticClass:
-        "h-6 px-2 py-1 text-white rounded-lg fill-current bg-primary ",
+      staticClass: "h-6 px-2 py-1 text-black bg-white rounded-lg fill-current ",
       attrs: { viewBox: "0 0 512 512", xmlns: "http://www.w3.org/2000/svg" }
     },
     [
@@ -29784,37 +29805,47 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", { staticClass: "p-2 rounded-sm bg-backgroundDark" }, [
-    _c(
-      "div",
-      { staticClass: "flex flex-col justify-between h-68" },
-      _vm._l([0, 1, 2, 3, 4, 5], function(row) {
-        return _c(
-          "div",
-          { key: row, staticClass: "flex flex-wrap justify-between w-68" },
-          _vm._l([0, 1, 2, 3, 4, 5], function(col) {
-            return _c(
-              "div",
-              {
-                key: col,
-                staticClass:
-                  "flex items-center justify-center rounded-sm w-11 h-11 tablet:w-18 tablet:h-18 bg-empty"
-              },
-              [
-                _vm._v(
-                  "\n            " +
-                    _vm._s(_vm.grid[row][col] == 0 ? "" : _vm.grid[row][col]) +
-                    "\n        "
-                )
-              ]
-            )
-          }),
-          0
-        )
-      }),
-      0
-    )
-  ])
+  return _c(
+    "div",
+    {
+      staticClass: "p-2 rounded-sm tablet:mt-4 desktop:mt-0 bg-backgroundDark"
+    },
+    [
+      _c(
+        "div",
+        { staticClass: "flex flex-col justify-between h-68 tablet:h-84" },
+        _vm._l([0, 1, 2, 3, 4, 5], function(row) {
+          return _c(
+            "div",
+            {
+              key: row,
+              staticClass: "flex flex-wrap justify-between w-68 tablet:w-84"
+            },
+            _vm._l([0, 1, 2, 3, 4, 5], function(col) {
+              return _c(
+                "div",
+                {
+                  key: col,
+                  class:
+                    "flex items-center font-black text-white justify-center rounded-sm w-11 h-11 tablet:w-18 tablet:h-18 " +
+                    _vm.getBlockClass(_vm.grid[row][col])
+                },
+                [
+                  _vm._v(
+                    "\n            " +
+                      _vm._s(_vm.grid[row][col] > 0 ? _vm.grid[row][col] : "") +
+                      "\n        "
+                  )
+                ]
+              )
+            }),
+            0
+          )
+        }),
+        0
+      )
+    ]
+  )
 }
 var staticRenderFns = []
 render._withStripped = true
