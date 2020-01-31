@@ -1,13 +1,16 @@
 <template>
-  <div>
-    <div class="flex flex-wrap my-2 w-gametable" v-for="row in [0,1,2,3,4,5]" :key="row">
-        <div class="flex items-center justify-center mx-1 h-gameblock w-gameblock bg-primary" v-for="col in [0,1,2,3,4,5]" :key="col">
-            {{ grid[row][col] == 0 ? '' : grid[row][col] }}
-        </div>
+  <div class="p-2 rounded-sm bg-backgroundDark">
+    <div class="flex flex-col justify-between h-68">
+      <div class="flex flex-wrap justify-between w-68" v-for="row in [0,1,2,3,4,5]" :key="row">
+          <div class="flex items-center justify-center rounded-sm w-11 h-11 tablet:w-18 tablet:h-18 bg-empty" v-for="col in [0,1,2,3,4,5]" :key="col">
+              {{ grid[row][col] == 0 ? '' : grid[row][col] }}
+          </div>
+      </div>
     </div>
   </div>
 </template>
 <script>
+import { Fragment } from 'vue-fragment'
 
 const defaultState = [0,1,2,3,4,5].map(entry => [{},{},{},{},{},{}])
 export default {
@@ -38,5 +41,6 @@ export default {
       });
     },
     props: [],
+    components: { Fragment }
 }
 </script>

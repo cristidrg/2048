@@ -23,6 +23,7 @@
         "laravel-echo": "^1.6.1",
         "pusher-js": "^5.0.3",
         "tailwindcss": "^1.1.4",
-        "vue": "^2.6.11"
+        "vue": "^2.6.11",
+        "vue-fragment": "^1.5.1"
     }
 }

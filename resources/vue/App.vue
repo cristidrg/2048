@@ -1,11 +1,15 @@
 <template>
-  <div class="w-full">
-    <form method="post" action="/api/message/" @submit.prevent="restartGame">
-      <button type="submit">Reset Game</button>
-    </form>
-    <div class="flex items-end justify-between w-8/12 mx-auto">
+  <div class="w-full h-full">
+    <div class="flex flex-col items-center items-end h-full mx-auto w-70 desktop:justify-center desktop:flex-row">
+      <div class="flex items-center w-full">
+        <h1 class="font-black text-primary">2048 V7</h1>
+        <form class="ml-auto" method="post" action="/api/message/" @submit.prevent="restartGame">
+          <button class="px-4 py-1 mt-2 mb-2 ml-auto mr-2 text-xs font-bold text-white uppercase rounded-lg bg-primary" type="submit">New game</button>
+        </form>
+        <CogWheel />
+      </div>
       <Grid />
-      <Chat className="my-1" :csrf="csrf" />
+      <Chat :csrf="csrf" />
     </div>
   </div>
 </template>
@@ -13,6 +17,7 @@
 <script>
 import Chat from './Chat.vue';
 import Grid from './Grid.vue';
+import CogWheel from './Cogwheel.vue';
 
 export default {
   data: () => ({
@@ -28,7 +33,8 @@ export default {
   },
   components: {
     Chat,
-    Grid
+    Grid,
+    CogWheel
   }
 }
 </script>
