@@ -10,21 +10,14 @@
   </div>
 </template>
 <script>
-import { Fragment } from 'vue-fragment'
 
-const defaultState = [0,1,2,3,4,5].map(entry => [{},{},{},{},{},{}])
 export default {
-    data() {
-      return {
-        grid: defaultState,
-      }
-    },
     methods: {
       getBlockClass(value) {
         let backgroundColor = "bg-empty";
         if (value == 1) {
           backgroundColor = "bg-primary";
-        }else if (value > 1) {
+        } else if (value > 1) {
           backgroundColor = `bg-block${value}`;
         } else if (value == - 1) {
           backgroundColor = `bg-obstacle`;
@@ -32,27 +25,7 @@ export default {
 
         return backgroundColor;
       },
-      mapBlocksToState(blocks) {
-        return blocks.reduce((acc, {row, column, value}) => {
-          acc[row][column] = value;
-          return acc;
-        }, defaultState);
-      },
     },
-    created() {
-      axios.get('/api/game/1')
-        .then(({ data }) => {
-          this.grid = this.mapBlocksToState(data.data.blocks)
-          this.$forceUpdate();
-        })
-        .catch(err => alert(err));
-
-      window.Echo.channel('gameUpdated').listen('GameUpdated', ({ blocks }) => {
-        this.grid = this.mapBlocksToState(blocks)
-        this.$forceUpdate();
-      });
-    },
-    props: [],
-    components: { Fragment }
+    props: ['grid', 'key'],
 }
 </script>
