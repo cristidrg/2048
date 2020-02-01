@@ -29808,7 +29808,8 @@ var render = function() {
   return _c(
     "div",
     {
-      staticClass: "p-2 rounded-sm tablet:mt-4 desktop:mt-0 bg-backgroundDark"
+      staticClass: "p-2 rounded-sm tablet:mt-4 desktop:mt-0 bg-backgroundDark",
+      attrs: { id: "board" }
     },
     [
       _c(
@@ -42106,6 +42107,55 @@ window.addEventListener('keyup', function (e) {
     }
   }
 });
+var xDown = null;
+var yDown = null;
+
+function handleTouchStart(evt) {
+  xDown = evt.touches[0].clientX;
+  yDown = evt.touches[0].clientY;
+}
+
+;
+
+function handleTouchMove(evt) {
+  if (!xDown || !yDown) {
+    return;
+  }
+
+  var xUp = evt.touches[0].clientX;
+  var yUp = evt.touches[0].clientY;
+  var xDiff = xDown - xUp;
+  var yDiff = yDown - yUp;
+  var grid = document.querySelector('#board');
+
+  if (grid.contains(evt.target)) {
+    if (Math.abs(xDiff) > Math.abs(yDiff)) {
+      /*most significant*/
+      if (xDiff > 0) {
+        console.log("LEEEEFT");
+        triggerMovement('left');
+      } else {
+        triggerMovement('right');
+      }
+    } else {
+      if (yDiff > 0) {
+        console.log("top");
+        triggerMovement('top');
+      } else {
+        triggerMovement('bottom');
+      }
+    }
+  }
+  /* reset values */
+
+
+  xDown = null;
+  yDown = null;
+}
+
+;
+document.addEventListener('touchstart', handleTouchStart, false);
+document.addEventListener('touchmove', handleTouchMove, false);
 
 /***/ }),
 

@@ -3,3 +3,12 @@
 @tailwind components;
 
 @tailwind utilities;
+
+html, body {
+    background-color: #f2f2f2;
+    color: #636b6f;
+    font-family: 'Nunito', sans-serif;
+    font-weight: 200;
+    height: 100vh;
+    margin: 0;
+}

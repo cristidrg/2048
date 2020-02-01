@@ -23,36 +23,40 @@ window.addEventListener('keyup', e => {
 var xDown = null;                                                        
 var yDown = null;                                                        
 
-function handleTouchStart(evt) {                                         
-    xDown = evt.originalEvent.touches[0].clientX;                                      
-    yDown = evt.originalEvent.touches[0].clientY;                                      
+function handleTouchStart(evt) {     
+    xDown = evt.touches[0].clientX;                                      
+    yDown = evt.touches[0].clientY;                                      
 };                                                
 
-// https://stackoverflow.com/questions/2264072/detect-a-finger-swipe-through-javascript-on-the-iphone-and-android
 function handleTouchMove(evt) {
     if ( ! xDown || ! yDown ) {
         return;
     }
-
-    var xUp = evt.originalEvent.touches[0].clientX;                                    
-    var yUp = evt.originalEvent.touches[0].clientY;
+    var xUp = evt.touches[0].clientX;                                    
+    var yUp = evt.touches[0].clientY;
 
     var xDiff = xDown - xUp;
     var yDiff = yDown - yUp;
 
-    if ( Math.abs( xDiff ) > Math.abs( yDiff ) ) {/*most significant*/
-        if ( xDiff > 0 ) {
-            triggerMovement('left');
+    var grid = document.querySelector('#board');
+    if (grid.contains(evt.target)) {
+        if ( Math.abs( xDiff ) > Math.abs( yDiff ) ) {/*most significant*/
+            if ( xDiff > 0 ) {
+                console.log("LEEEEFT");
+                triggerMovement('left');
+            } else {
+                triggerMovement('right');
+            }                       
         } else {
-            triggerMovement('right');
-        }                       
-    } else {
-        if ( yDiff > 0 ) {
-            triggerMovement('up');
-        } else { 
-            triggerMovement('down');
-        }                                                                 
-    }
+            if ( yDiff > 0 ) {
+                console.log("top");
+                triggerMovement('top');
+            } else { 
+                triggerMovement('bottom');
+            }                                                                 
+        }
+    }   
+
     /* reset values */
     xDown = null;
     yDown = null;                                             
