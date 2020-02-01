@@ -40,7 +40,9 @@ function handleTouchMove(evt) {
 
     var grid = document.querySelector('#board');
     if (grid.contains(evt.target)) {
+        
         evt.preventDefault();
+
         if ( Math.abs( xDiff ) > Math.abs( yDiff ) ) {/*most significant*/
             if ( xDiff > 0 ) {
                 triggerMovement('left');
@@ -61,5 +63,5 @@ function handleTouchMove(evt) {
     yDown = null;                                             
 };
 
-document.addEventListener('touchstart', handleTouchStart, false);        
-document.addEventListener('touchmove', handleTouchMove, false);
+document.addEventListener('touchstart', handleTouchStart);        
+document.addEventListener('touchmove', handleTouchMove);
