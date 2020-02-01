@@ -15,6 +15,7 @@ class GameUpdated implements ShouldBroadcast
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
     public $blocks;
+    public $obstacleCount;
     public $gameOver;
 
     /**
@@ -22,9 +23,10 @@ class GameUpdated implements ShouldBroadcast
      *
      * @return void
      */
-    public function __construct($blocks, $gameOver = false)
+    public function __construct($blocks, $obstacleCount, $gameOver = false)
     {
         $this->blocks = $blocks;
+        $this->obstacleCount = $obstacleCount;
         $this->gameOver = $gameOver;
     }
 

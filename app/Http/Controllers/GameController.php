@@ -40,7 +40,7 @@ class GameController extends Controller
             }
         }
 
-        GameUpdated::dispatch($game->blocks);
+        GameUpdated::dispatch($game->blocks, $game->obstacleCount);
 
         return Response::json(array(
             'success' => true,
@@ -85,7 +85,7 @@ class GameController extends Controller
             }
         DB::commit();
         
-        GameUpdated::dispatch($game->blocks, $newState['gridIsFull']);
+        GameUpdated::dispatch($game->blocks, $game->obstacleCount, $newState['gridIsFull']);
 
         return Response::json(array(
             'success' => true,
@@ -131,10 +131,9 @@ class GameController extends Controller
         }
 
         $game->obstacleCount = request('numberOfObstacles');
+        $game->save();
 
-        return Response::json(array(
-            'success' => true
-        ));
+        return $this->restartGame($game);
     }
 
     public function receiveMessage(int $id)

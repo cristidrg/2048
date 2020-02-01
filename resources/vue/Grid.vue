@@ -26,6 +26,6 @@ export default {
         return backgroundColor;
       },
     },
-    props: ['grid', 'key'],
+    props: ['grid'],
 }
 </script>
