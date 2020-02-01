@@ -49,6 +49,12 @@ class GameController extends Controller
 
     private function handleMovement($game, $command)
     {
+        if ($game->getPlayingState() != 'playing') {
+            return Response::json(array(
+                'error' => 'Game id ' . $game->id . ' has finished. Restart it!'
+            ));
+        }
+
         $grid = array_fill(0, 6, array_fill(0, 6,0));
 
         foreach ($game->blocks as $block) {
@@ -85,7 +91,7 @@ class GameController extends Controller
             }
         DB::commit();
         
-        GameUpdated::dispatch($game->blocks, $game->obstacleCount, $newState['gridIsFull']);
+        GameUpdated::dispatch($game->blocks, $game->obstacleCount, $game->getPlayingState());
 
         return Response::json(array(
             'success' => true,

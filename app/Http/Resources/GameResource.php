@@ -19,7 +19,8 @@ class GameResource extends JsonResource
             'blocks' => $this->blocks->map(function($item) {
                 return new BlockResource($item);
             }),
-            'obstacleCount' => $this->obstacleCount
+            'obstacleCount' => $this->obstacleCount,
+            'gameState' => $this->getPlayingState()
         ];
     }
 }

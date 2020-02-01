@@ -1921,6 +1921,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 
 
 
@@ -1931,7 +1932,8 @@ __webpack_require__.r(__webpack_exports__);
       grid: [0, 1, 2, 3, 4, 5].map(function (entry) {
         return [{}, {}, {}, {}, {}, {}];
       }),
-      obstacleCount: 0
+      obstacleCount: 0,
+      gameState: 'playing'
     };
   },
   methods: {
@@ -1952,6 +1954,7 @@ __webpack_require__.r(__webpack_exports__);
       var data = _ref2.data;
       _this.grid = _this.grid.splice(0, _this.grid.length, _this.mapBlocksToState(data.data.blocks));
       _this.obstacleCount = data.data.obstacleCount;
+      _this.gameState = data.data.gameState;
     })["catch"](function (err) {
       return alert(err);
     });
@@ -1960,6 +1963,7 @@ __webpack_require__.r(__webpack_exports__);
           obstacleCount = _ref3.obstacleCount;
       _this.grid = _this.grid.splice(0, _this.grid.length, _this.mapBlocksToState(blocks));
       _this.obstacleCount = obstacleCount;
+      _this.gameState = gameState;
     });
   },
   components: {
@@ -29629,7 +29633,11 @@ var render = function() {
       },
       [
         _c("GameOptions", { attrs: { obstacleCount: _vm.obstacleCount } }),
-        _vm._v(" "),
+        _vm._v(
+          "\n    " +
+            _vm._s(_vm.gameState == "playing" ? "" : _vm.gameState) +
+            "\n    "
+        ),
         _c("Grid", { attrs: { grid: _vm.grid } }),
         _vm._v(" "),
         _c("Chat", { attrs: { csrf: _vm.csrf } })

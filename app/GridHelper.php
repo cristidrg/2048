@@ -29,10 +29,13 @@ class GridHelper
 
         return [
             "grid" => $grid,
-            "gameOver" => $gameOver
+            "gridIsFull" => $gridIsFull
         ];
     }
 
+    /*
+    Obstacles are represented with a value of -1
+    */
     public static function switchLeft($startingGrid)
     {
         $grid = $startingGrid;

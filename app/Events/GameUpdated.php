@@ -16,18 +16,18 @@ class GameUpdated implements ShouldBroadcast
 
     public $blocks;
     public $obstacleCount;
-    public $gameOver;
+    public $gameState;
 
     /**
      * Create a new event instance.
      *
      * @return void
      */
-    public function __construct($blocks, $obstacleCount, $gameOver = false)
+    public function __construct($blocks, $obstacleCount, $gameState)
     {
         $this->blocks = $blocks;
         $this->obstacleCount = $obstacleCount;
-        $this->gameOver = $gameOver;
+        $this->gameState = $gameState;
     }
 
     /**
