@@ -12,9 +12,17 @@ html, body {
     font-family: 'Nunito', sans-serif;
     font-weight: 200;
     
-    height: 100vh;
+    max-height: 100vh;
+    
     margin: 0;
 }
+
+@media only screen and (min-width: 1023px) {
+    html, body {
+        max-height: auto;
+    }
+}
+
 
 * {
     transition: all 0.155s linear;
