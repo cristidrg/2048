@@ -23,6 +23,11 @@
 * [Getting Started](#getting-started)
   * [Prerequisites](#prerequisites)
   * [Installation](#installation)
+* [Development Notes](#development-notes-and-challenges)
+  * [Database Design](#database-design)
+  * [Back-end Design](#back-end-design)
+  * [Front-end Design](#front-end-design)
+* [My Notes][#my-notes]
 * [Contact](#contact)
 
 ## About The Project
@@ -173,8 +178,7 @@ I used TailWind CSS to increase development speed.
 
 ## My notes
 I've spent 18 hours on this assignment, and much more could be polished. I'm happy to continue developing it, add testing, implement democracy mode,
-improve the game algorithm, add block slide animations, refactor the code (remove magic numbers and strings, etc.), as well as improving the Chat UI portion on the app,
-however I think this can give a glimpse of what I can do.
+improve the game algorithm, add block slide animations, refactor the code (remove magic numbers and strings, etc.), as well as improving the Chat UI portion on the app, and improve the back-end performance, however I think this can give a glimpse of what I can do.
 
 I felt that this project was much more back-end focused but I enjoyed it and it served as an indicator of my web ecosystem knowledge.
 
