@@ -8,7 +8,11 @@
 
         <!-- Fonts -->
         <link href="https://fonts.googleapis.com/css?family=Nunito:200,600" rel="stylesheet">
-        <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+        @if (env('APP_ENV') == 'local')
+            <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+        @else
+            <link href="{{ secure_asset('css/app.css') }}" rel="stylesheet">
+        @endif
     </head>
     <body class="overflow-hidden desktop:overflow-auto">
         <div id="app"></div>
