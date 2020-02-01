@@ -1,6 +1,6 @@
 <template>
     <div class="flex items-center w-full mt-8 desktop:justify-center desktop:flex desktop:flex-wrap desktop:h-16 desktop:mb-16">
-        <modal name="settings">
+        <modal :adaptive="true" name="settings">
             <div class="mx-auto">
                 <div class="flex items-center w-10/12 mx-auto">
                     <p class="pb-2 mt-2 text-2xl font-bold">Settings</p>

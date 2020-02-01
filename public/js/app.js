@@ -29762,7 +29762,7 @@ var render = function() {
         "flex items-center w-full mt-8 desktop:justify-center desktop:flex desktop:flex-wrap desktop:h-16 desktop:mb-16"
     },
     [
-      _c("modal", { attrs: { name: "settings" } }, [
+      _c("modal", { attrs: { adaptive: true, name: "settings" } }, [
         _c("div", { staticClass: "mx-auto" }, [
           _c("div", { staticClass: "flex items-center w-10/12 mx-auto" }, [
             _c("p", { staticClass: "pb-2 mt-2 text-2xl font-bold" }, [
