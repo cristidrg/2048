@@ -42250,17 +42250,17 @@ function handleTouchMove(evt) {
   var grid = document.querySelector('#board');
 
   if (grid.contains(evt.target)) {
+    evt.preventDefault();
+
     if (Math.abs(xDiff) > Math.abs(yDiff)) {
       /*most significant*/
       if (xDiff > 0) {
-        console.log("LEEEEFT");
         triggerMovement('left');
       } else {
         triggerMovement('right');
       }
     } else {
       if (yDiff > 0) {
-        console.log("top");
         triggerMovement('top');
       } else {
         triggerMovement('bottom');
