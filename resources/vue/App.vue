@@ -3,7 +3,7 @@
     <div class="flex flex-col items-center items-end h-full mx-auto w-70 tablet:w-84 tablet:justify-center tablet:flex-wrap desktop:items-start desktop:w-11/12 desktop:flex-row desktop:content-start">
       <GameOptions :obstacleCount="obstacleCount" />
       {{ gameState == 'playing' ? '' : gameState }}
-      <Grid :grid="grid" />
+      <Grid :grid="grid" :previousGrid="previousGrid" />
       <Chat :csrf="csrf" />
     </div>
   </div>
@@ -17,7 +17,8 @@ import GameOptions from './GameOptions';
 export default {
   data: () => ({
     csrf: document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
-    grid: [0,1,2,3,4,5].map(entry => [{},{},{},{},{},{}]),
+    grid: {},
+    previousGrid: {},
     obstacleCount: 0,
     gameState: 'playing'
   }),
@@ -26,24 +27,24 @@ export default {
     mapBlocksToState(blocks) {
       return blocks.reduce(
         (acc, {id, row, column, value}) => {
-          acc[row][column] = {id, value};
+          acc[id] = { id, row, column, value };
           return acc;
-        },
-        this.grid
-      );
+      }, {});
     },
   },
   created() {
     axios.get('/api/game/1')
       .then(({ data }) => {
-        this.grid = this.grid.splice(0, this.grid.length, this.mapBlocksToState(data.data.blocks));
+        this.grid = this.mapBlocksToState(data.data.blocks);
+        this.previousGrid = this.grid;
         this.obstacleCount = data.data.obstacleCount
         this.gameState = data.data.gameState
       })
       .catch(err => alert(err));
 
     window.Echo.channel('gameUpdated').listen('GameUpdated', ({ blocks, obstacleCount, gameState }) => {
-      this.grid = this.grid.splice(0, this.grid.length, this.mapBlocksToState(blocks));
+      this.previousGrid = this.grid;
+      this.grid = this.mapBlocksToState(blocks);
       this.obstacleCount = obstacleCount;
       this.gameState = gameState;
     });
