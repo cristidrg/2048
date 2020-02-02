@@ -24,10 +24,13 @@ export default {
 
   methods: {
     mapBlocksToState(blocks) {
-      return blocks.reduce((acc, {row, column, value}) => {
-        acc[row][column] = value;
-        return acc;
-      }, this.grid);
+      return blocks.reduce(
+        (acc, {id, row, column, value}) => {
+          acc[row][column] = {id, value};
+          return acc;
+        },
+        this.grid
+      );
     },
   },
   created() {
