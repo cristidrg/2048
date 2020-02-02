@@ -1,6 +1,6 @@
 <template>
   <div class="relative p-4 rounded-sm h-68 w-68 tablet:w-84 tablet:h-84 tablet:mt-4 desktop:mt-0 bg-backgroundDark" id="board">
-    <div v-for="id in Object.keys(grid)" :key="`${id}${grid[id].row}${grid[id].column}${grid[id].value}`" :ref="id"
+    <div v-for="id in Object.keys(grid)" :key="`${id}${grid[id].row}${grid[id].column}${grid[id].value}${offSet}`" :ref="id"
       v-anime="{top: getTopValue(id), left: getLeftValue(id), duration: 250}"
       :class="`flex absolute items-center font-black text-white justify-center rounded-sm w-11 h-11 tablet:w-18 tablet:h-18 ${getBlockClass(previousGrid[id].value, grid[id].value)} ${getAnimations(id)}`">
         {{ getValue(id) }}
@@ -9,6 +9,11 @@
 </template>
 <script>
 export default {
+    data: () => ({
+      offSet: 9,
+      gridSize: 78,
+    }),
+
     updated() {
       Object.values(this.grid).forEach(({id, value}) => {
         if (this.previousGrid[id].value == 0 && value == 1) {
@@ -25,19 +30,40 @@ export default {
         }
       });
     },
+    created() {
+      var mq = window.matchMedia( "(max-width: 767px)" );
+      if (mq.matches) {
+        this.offSet = 2.5;
+        this.gridSize = 45;
+      }
+
+
+      window.addEventListener('resize', (e) => {
+        var mq = window.matchMedia( "(max-width: 767px)" );
+        console.log(this.gridSize);
+        if (mq.matches) {
+          this.gridSize = 45;
+          this.offSet = 2.5;
+        } else {
+          this.gridSize = 78;
+          this.offSet = 9;
+        }
+      });
+    },
+
     methods: {
       getTopValue(id) {
         if (this.grid[id].value == 0) {
-          return [`${78 * this.grid[id].row}px`, `${78 * this.grid[id].row}px`]
+          return [`${this.gridSize * this.grid[id].row + this.offSet}px`, `${this.gridSize * this.grid[id].row + this.offSet}px`]
         } else {
-          return [`${78 * this.previousGrid[id].row}px`, `${78 * this.grid[id].row}px`]
+          return [`${this.gridSize * this.previousGrid[id].row + this.offSet}px`, `${this.gridSize * this.grid[id].row + this.offSet}px`]
         }
       },
       getLeftValue(id) {
         if (this.grid[id].value == 0) {
-          return [`${78 * this.previousGrid[id].column}px`, `${78 * this.grid[id].column}px`]
+          return [`${this.gridSize * this.previousGrid[id].column + this.offSet}px`, `${this.gridSize * this.grid[id].column + this.offSet}px`]
         } else {
-          return [`${78 * this.previousGrid[id].column}px`,`${78 * this.grid[id].column}px`]
+          return [`${this.gridSize * this.previousGrid[id].column + this.offSet}px`,`${this.gridSize * this.grid[id].column + this.offSet}px`]
         }
       },
       getValue(id) {
@@ -74,9 +100,3 @@ export default {
     props: ['grid', 'previousGrid'],
 }
 </script>
-
-<style scoped>
-#board {
-  transition-delay: 5000ms;
-}
-</style>
