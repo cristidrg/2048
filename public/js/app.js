@@ -1960,7 +1960,8 @@ __webpack_require__.r(__webpack_exports__);
     });
     window.Echo.channel('gameUpdated').listen('GameUpdated', function (_ref3) {
       var blocks = _ref3.blocks,
-          obstacleCount = _ref3.obstacleCount;
+          obstacleCount = _ref3.obstacleCount,
+          gameState = _ref3.gameState;
       _this.grid = _this.grid.splice(0, _this.grid.length, _this.mapBlocksToState(blocks));
       _this.obstacleCount = obstacleCount;
       _this.gameState = gameState;
@@ -42582,8 +42583,8 @@ __webpack_require__.r(__webpack_exports__);
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! /Users/cristidrg/dev/echo-series/resources/js/app.js */"./resources/js/app.js");
-module.exports = __webpack_require__(/*! /Users/cristidrg/dev/echo-series/resources/sass/app.scss */"./resources/sass/app.scss");
+__webpack_require__(/*! /Users/cristidrg/dev/echo-series 2/resources/js/app.js */"./resources/js/app.js");
+module.exports = __webpack_require__(/*! /Users/cristidrg/dev/echo-series 2/resources/sass/app.scss */"./resources/sass/app.scss");
 
 
 /***/ })

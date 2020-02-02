@@ -16,31 +16,33 @@ class GameController extends Controller
 {
     private function restartGame(Game $game)
     {
-        foreach ($game->blocks as $block) {
+        $setObstacles = 0;
+        $blocks = $game->blocks;
+        $obstacleCount = $game->obstacleCount;
+
+        foreach ($blocks as $block) {
             $block->value = 0;
-            $block->save();
         }
 
-        $setObstacles = 0;
-        while ($setObstacles < $game->obstacleCount) {
+        $blocks[rand(0, 35)]->value = 2;
+
+        while ($setObstacles < $obstacleCount) {
             $obstacleIndex = rand(0, 35);
-            if ($game->blocks[$obstacleIndex]->value == 0) {
-                $game->blocks[$obstacleIndex]->value = -1;
-                $game->blocks[$obstacleIndex]->save();
+            if ($blocks[$obstacleIndex]->value == 0) {
+                $blocks[$obstacleIndex]->value = -1;
                 $setObstacles = $setObstacles + 1;
             }
         }
 
-        while (true) {
-            $startingBlock = rand(0, 35);
-            if ($game->blocks[$startingBlock]->value == 0) {
-                $game->blocks[$startingBlock]->value = 1;
-                $game->blocks[$startingBlock]->save();
-                break;
-            }
+        DB::beginTransaction();
+        foreach ($blocks as $block) {
+            DB::table('blocks')
+                ->where('id', '=', $block["id"])
+                ->update(['value' => $block["value"]]);
         }
+        DB::commit();
 
-        GameUpdated::dispatch($game->blocks, $game->obstacleCount);
+        GameUpdated::dispatch($blocks, $obstacleCount, $game->getPlayingState());
 
         return Response::json(array(
             'success' => true,

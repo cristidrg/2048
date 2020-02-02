@@ -39,7 +39,7 @@ export default {
       })
       .catch(err => alert(err));
 
-    window.Echo.channel('gameUpdated').listen('GameUpdated', ({ blocks, obstacleCount }) => {
+    window.Echo.channel('gameUpdated').listen('GameUpdated', ({ blocks, obstacleCount, gameState }) => {
       this.grid = this.grid.splice(0, this.grid.length, this.mapBlocksToState(blocks));
       this.obstacleCount = obstacleCount;
       this.gameState = gameState;
