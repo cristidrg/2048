@@ -26,7 +26,6 @@
   * [Database Design](#database-design)
   * [Back-end Design](#back-end-design)
   * [Front-end Design](#front-end-design)
-* [My Notes](#my-notes)
 * [Contact](#contact)
 
 ## About The Project
