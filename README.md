@@ -8,10 +8,9 @@
   <p align="center">
     A multiplayer version of 2048, inspired by Twitch Plays Pokemon.
     <br />
-    <a href="https://github.com/cristidrg/2048"><strong>Explore the docs »</strong></a>
+    <a href="https://live-2048.herokuapp.com/"><strong>View demo »</strong></a>
     <br />
     <br />
-    <a href="https://live-2048.herokuapp.com/">View Demo</a>
   </p>
 </p>
 
@@ -27,7 +26,7 @@
   * [Database Design](#database-design)
   * [Back-end Design](#back-end-design)
   * [Front-end Design](#front-end-design)
-* [My Notes][#my-notes]
+* [My Notes](#my-notes)
 * [Contact](#contact)
 
 ## About The Project
@@ -36,7 +35,7 @@
 
 This project is an variant of the 2048 game which introduces a multiplayer feature, in which players move blocks on the board via chat messages.
 
-It also served as a self-development tool to learn how to implement web sockets in the backend.
+It served as a self-development tool to learn how to implement web sockets on back-end.
 
 ### Built With
 
@@ -44,6 +43,7 @@ It also served as a self-development tool to learn how to implement web sockets 
 * [Pusher](https://pusher.com/)
 * [TailWind CSS](https://tailwindcss.com/)
 * [Vue.js](https://vuejs.org/)
+* [Anime.js](https://animejs.com/)
 
 ## How To Play
 
@@ -53,7 +53,7 @@ Players can modify how many obstacles are on the board in the settings.
 
 To move the blocks, send movement commands: 'left', 'right', 'bottom' or 'top' -- In lower case format
 
-To facilitate testing and debugging, arrow keys and touch gestures inside the grid are turned on.
+To facilitate testing and debugging, arrow keys and touch gestures inside the grid are available.
 
 [Click to play!](https://live-2048.herokuapp.com/)
 
@@ -67,10 +67,8 @@ To get a local copy up and running follow these simple steps.
 * [Laravel 6+](https://laravel.com/docs/6.x)
 * [Node.js](https://nodejs.org/en/download/)
 * A MySQL database
-* [A Free Pusher.io App](https://dashboard.pusher.com/accounts/sign_up)
-* Optional - [Sentry for Debugging](http://sentry.io/)
-
-I added Sentry after you told me about it, it's so great!
+* [Pusher](https://dashboard.pusher.com/accounts/sign_up) - free version is ok
+* Optional - [Sentry](http://sentry.io/)
 
 ### Installation
  
@@ -105,7 +103,6 @@ php artisan db:seed
 php artisan serve
 ```
 
-<!-- ROADMAP -->
 ## Development Notes And Challenges
 
 ### Database Design
@@ -121,8 +118,8 @@ php artisan serve
 This database schema fulfills all the needs for a single game session. Figuring out if a game
 is done can be checked via the blocks values.
 
-If we would want to have multiple rooms at the same time which also support
-democracy/anarchy modes, we could use the following structure:
+If we would want to have multiple game rooms at the same time which also support
+turn-based turns, we could use the following structure:
 
 - GameRoom has:
     - democracyActive (bool)
@@ -153,7 +150,7 @@ using Laravel Events and Pusher.io. There are two public channels used:
 - BroadcastMessageCreation - for messages
 - GameUpdated - for game state
 
-The API looks like following
+The API routes are:
 ```
 +--------+---------------+----------------------------+------+----------------------------------------------------------+--------------+
 | Domain | Method        | URI                        | Name | Action                                                   | Middleware   |
@@ -168,19 +165,9 @@ The API looks like following
 The /commands route accepts the playing commands "left","right","top","bottom" as well as "restart".
 
 ### Front-end Design
-The front-end keeps most of its data in the root component. The chat component is standalone, however its data should be moved to the root,
-to keep the same pattern of data-flow throughout the components.
+The front-end was built using Vue.js to ease data manipulation. The game grid is built using div elements positioned absolutely inside the grid container. Anime.js was leveraged to create smooth animations.
 
-Colors can be changed easily in tailwind.config.js, 
-
-I used TailWind CSS to increase development speed.
-
-
-## My notes
-I've spent 18 hours on this assignment, and much more could be polished. I'm happy to continue developing it, add testing, implement democracy mode,
-improve the game algorithm, add block slide animations, refactor the code (remove magic numbers and strings, etc.), as well as improving the Chat UI portion on the app, and improve the back-end performance, however I think this can give a glimpse of what I can do.
-
-I felt that this project was much more back-end focused but I enjoyed it and it served as an indicator of my web ecosystem knowledge.
+Theming is done via TailWind CSS.
 
 ## Contact
 Cristian Dragomir - [@linkedin](https://www.linkedin.com/in/cristidrg/) - cristiandrg96@gmail.com

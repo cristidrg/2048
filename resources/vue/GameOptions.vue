@@ -17,7 +17,7 @@
             </div>
         </modal>
         
-        <h1 class="font-black text-center text-black desktop:text-3xl desktop:w-full">2048 V7</h1>
+        <h1 class="font-black text-center text-black desktop:text-3xl desktop:w-full">2048 Live</h1>
         <form class="ml-auto desktop:ml-0 " method="post" action="/api/message/" @submit.prevent="restartGame">
             <button class="px-4 py-1 mt-2 mb-2 ml-auto mr-2 text-xs font-bold text-black uppercase bg-white rounded-lg hover:bg-primary hover:text-white" type="submit">New game</button>
         </form>

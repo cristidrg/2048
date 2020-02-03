@@ -31251,7 +31251,7 @@ var render = function() {
           staticClass:
             "font-black text-center text-black desktop:text-3xl desktop:w-full"
         },
-        [_vm._v("2048 V7")]
+        [_vm._v("2048 Live")]
       ),
       _vm._v(" "),
       _c(
