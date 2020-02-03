@@ -3431,6 +3431,10 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -3456,6 +3460,12 @@ __webpack_require__.r(__webpack_exports__);
             anim.completed ? _this.$refs[id][0].innerText = value : '';
           }
         });
+      } else if (value > 1 && _this.previousGrid[id].value == value / 2) {
+        _this.$anime({
+          targets: _this.$refs[id][0],
+          scale: [1, 1, 2, 1],
+          duration: 250
+        });
       }
     });
   },
@@ -3471,7 +3481,6 @@ __webpack_require__.r(__webpack_exports__);
 
     window.addEventListener('resize', function (e) {
       var mq = window.matchMedia("(max-width: 767px)");
-      console.log(_this2.gridSize);
 
       if (mq.matches) {
         _this2.gridSize = 45;
@@ -3483,50 +3492,41 @@ __webpack_require__.r(__webpack_exports__);
     });
   },
   methods: {
-    getTopValue: function getTopValue(id) {
-      if (this.grid[id].value == 0) {
-        return ["".concat(this.gridSize * this.grid[id].row + this.offSet, "px"), "".concat(this.gridSize * this.grid[id].row + this.offSet, "px")];
+    getTopValue: function getTopValue(value, row, id) {
+      if (value == 0) {
+        return ["".concat(this.gridSize * row + this.offSet, "px"), "".concat(this.gridSize * row + this.offSet, "px")];
       } else {
-        return ["".concat(this.gridSize * this.previousGrid[id].row + this.offSet, "px"), "".concat(this.gridSize * this.grid[id].row + this.offSet, "px")];
+        return ["".concat(this.gridSize * this.previousGrid[id].row + this.offSet, "px"), "".concat(this.gridSize * row + this.offSet, "px")];
       }
     },
-    getLeftValue: function getLeftValue(id) {
-      if (this.grid[id].value == 0) {
-        return ["".concat(this.gridSize * this.previousGrid[id].column + this.offSet, "px"), "".concat(this.gridSize * this.grid[id].column + this.offSet, "px")];
+    getLeftValue: function getLeftValue(value, column, id) {
+      if (value == 0) {
+        return ["".concat(this.gridSize * column + this.offSet, "px"), "".concat(this.gridSize * column + this.offSet, "px")];
       } else {
-        return ["".concat(this.gridSize * this.previousGrid[id].column + this.offSet, "px"), "".concat(this.gridSize * this.grid[id].column + this.offSet, "px")];
+        return ["".concat(this.gridSize * this.previousGrid[id].column + this.offSet, "px"), "".concat(this.gridSize * column + this.offSet, "px")];
       }
     },
     getValue: function getValue(id) {
-      if (this.previousGrid[id].value == 0 && this.grid[id].value == 1) {
+      var value = this.grid[id].value;
+
+      if (this.previousGrid[id].value == 0 && value == 1 || value == -1) {
         return '';
-      } else if (this.grid[id].value > 0) {
-        return this.grid[id].value;
-      }
-    },
-    getAnimations: function getAnimations(id) {
-      if (this.previousGrid[id].value != this.grid[id].value) {
-        return this.grid[id].value == 0 ? 'animation-dissapear' : 'animation-merge';
       }
 
-      return '';
+      return value;
     },
     getBlockClass: function getBlockClass(prevValue, value) {
       if (prevValue == 0 && value == 1) {
-        return "bg-empty";
-      }
-
-      var backgroundColor = "bg-empty";
-
-      if (value == 1) {
-        backgroundColor = "bg-primary";
+        return "display-none";
+      } else if (value == 1) {
+        return "bg-primary";
       } else if (value > 1) {
-        backgroundColor = "bg-block".concat(value);
+        return "bg-block".concat(value);
       } else if (value == -1) {
-        backgroundColor = "bg-obstacle";
+        return "bg-obstacle";
       }
 
-      return backgroundColor;
+      return "bg-empty";
     }
   },
   props: ['grid', 'previousGrid']
@@ -31338,42 +31338,68 @@ var render = function() {
         "relative p-4 rounded-sm h-68 w-68 tablet:w-84 tablet:h-84 tablet:mt-4 desktop:mt-0 bg-backgroundDark",
       attrs: { id: "board" }
     },
-    _vm._l(Object.keys(_vm.grid), function(id) {
-      return _c(
-        "div",
-        {
+    [
+      _vm._l(new Array(36), function(iterator, idx) {
+        return _c("div", {
           directives: [
             {
               name: "anime",
               rawName: "v-anime",
               value: {
-                top: _vm.getTopValue(id),
-                left: _vm.getLeftValue(id),
+                top: _vm.getTopValue(0, Math.floor(idx / 6)),
+                left: _vm.getLeftValue(0, idx % 6, 0),
                 duration: 250
               },
               expression:
-                "{top: getTopValue(id), left: getLeftValue(id), duration: 250}"
+                "{top: getTopValue(0, Math.floor(idx / 6)), left: getLeftValue(0, idx % 6, 0), duration: 250}"
             }
           ],
-          key:
-            "" +
-            id +
-            _vm.grid[id].row +
-            _vm.grid[id].column +
-            _vm.grid[id].value +
-            _vm.offSet,
-          ref: id,
-          refInFor: true,
-          class:
-            "flex absolute items-center font-black text-white justify-center rounded-sm w-11 h-11 tablet:w-18 tablet:h-18 " +
-            _vm.getBlockClass(_vm.previousGrid[id].value, _vm.grid[id].value) +
-            " " +
-            _vm.getAnimations(id)
-        },
-        [_vm._v("\n      " + _vm._s(_vm.getValue(id)) + "\n  ")]
+          key: "" + Math.floor(idx / 6) + (idx % 6) + "0" + _vm.offSet,
+          staticClass:
+            "absolute flex items-center justify-center font-black text-white rounded-sm w-11 h-11 tablet:w-18 tablet:h-18 bg-empty"
+        })
+      }),
+      _vm._v(" "),
+      _vm._l(
+        Object.values(_vm.grid).filter(function(ref) {
+          var value = ref.value
+
+          return value != 0
+        }),
+        function(ref) {
+          var id = ref.id
+          var row = ref.row
+          var column = ref.column
+          var value = ref.value
+          return _c(
+            "div",
+            {
+              directives: [
+                {
+                  name: "anime",
+                  rawName: "v-anime",
+                  value: {
+                    top: _vm.getTopValue(value, row, id),
+                    left: _vm.getLeftValue(value, column, id),
+                    duration: 250
+                  },
+                  expression:
+                    "{top: getTopValue(value, row, id), left: getLeftValue(value, column, id), duration: 250}"
+                }
+              ],
+              key: "" + id + row + column + value + _vm.offSet,
+              ref: id,
+              refInFor: true,
+              class:
+                "flex absolute items-center font-black text-white justify-center rounded-sm w-11 h-11 tablet:w-18 tablet:h-18 " +
+                _vm.getBlockClass(_vm.previousGrid[id].value, value)
+            },
+            [_vm._v("\n      " + _vm._s(_vm.getValue(id)) + "\n  ")]
+          )
+        }
       )
-    }),
-    0
+    ],
+    2
   )
 }
 var staticRenderFns = []

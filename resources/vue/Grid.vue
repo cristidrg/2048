@@ -1,8 +1,12 @@
 <template>
   <div class="relative p-4 rounded-sm h-68 w-68 tablet:w-84 tablet:h-84 tablet:mt-4 desktop:mt-0 bg-backgroundDark" id="board">
-    <div v-for="id in Object.keys(grid)" :key="`${id}${grid[id].row}${grid[id].column}${grid[id].value}${offSet}`" :ref="id"
-      v-anime="{top: getTopValue(id), left: getLeftValue(id), duration: 250}"
-      :class="`flex absolute items-center font-black text-white justify-center rounded-sm w-11 h-11 tablet:w-18 tablet:h-18 ${getBlockClass(previousGrid[id].value, grid[id].value)} ${getAnimations(id)}`">
+    <div v-for="(iterator, idx) in new Array(36)" :key="`${Math.floor(idx / 6)}${idx % 6}0${offSet}`"
+       v-anime="{top: getTopValue(0, Math.floor(idx / 6)), left: getLeftValue(0, idx % 6, 0), duration: 250}"
+      class="absolute flex items-center justify-center font-black text-white rounded-sm w-11 h-11 tablet:w-18 tablet:h-18 bg-empty" />
+    
+    <div v-for="{id, row, column, value} in Object.values(grid).filter(({value}) => value != 0)" :key="`${id}${row}${column}${value}${offSet}`" :ref="id"
+      v-anime="{top: getTopValue(value, row, id), left: getLeftValue(value, column, id), duration: 250}"
+      :class="`flex absolute items-center font-black text-white justify-center rounded-sm w-11 h-11 tablet:w-18 tablet:h-18 ${getBlockClass(previousGrid[id].value, value)}`">
         {{ getValue(id) }}
     </div>
   </div>
@@ -13,7 +17,6 @@ export default {
       offSet: 9,
       gridSize: 78,
     }),
-
     updated() {
       Object.values(this.grid).forEach(({id, value}) => {
         if (this.previousGrid[id].value == 0 && value == 1) {
@@ -26,6 +29,12 @@ export default {
             complete: (anim) => {
               anim.completed ? this.$refs[id][0].innerText = value : '';
             }
+          });
+        } else if (value > 1 && this.previousGrid[id].value == value / 2) {
+          this.$anime({
+            targets: this.$refs[id][0],
+            scale: [1, 1,2, 1],
+            duration: 250,
           });
         }
       });
@@ -40,7 +49,7 @@ export default {
 
       window.addEventListener('resize', (e) => {
         var mq = window.matchMedia( "(max-width: 767px)" );
-        console.log(this.gridSize);
+
         if (mq.matches) {
           this.gridSize = 45;
           this.offSet = 2.5;
@@ -52,49 +61,40 @@ export default {
     },
 
     methods: {
-      getTopValue(id) {
-        if (this.grid[id].value == 0) {
-          return [`${this.gridSize * this.grid[id].row + this.offSet}px`, `${this.gridSize * this.grid[id].row + this.offSet}px`]
+      getTopValue(value, row, id) {
+        if (value == 0) {
+          return [`${this.gridSize * row + this.offSet}px`, `${this.gridSize * row + this.offSet}px`]
         } else {
-          return [`${this.gridSize * this.previousGrid[id].row + this.offSet}px`, `${this.gridSize * this.grid[id].row + this.offSet}px`]
+          return [`${this.gridSize * this.previousGrid[id].row + this.offSet}px`, `${this.gridSize * row + this.offSet}px`]
         }
       },
-      getLeftValue(id) {
-        if (this.grid[id].value == 0) {
-          return [`${this.gridSize * this.previousGrid[id].column + this.offSet}px`, `${this.gridSize * this.grid[id].column + this.offSet}px`]
+      getLeftValue(value, column, id) {
+        if (value == 0) {
+          return [`${this.gridSize * column + this.offSet}px`, `${this.gridSize * column + this.offSet}px`]
         } else {
-          return [`${this.gridSize * this.previousGrid[id].column + this.offSet}px`,`${this.gridSize * this.grid[id].column + this.offSet}px`]
+          return [`${this.gridSize * this.previousGrid[id].column + this.offSet}px`,`${this.gridSize * column + this.offSet}px`]
         }
       },
       getValue(id) {
-        if (this.previousGrid[id].value == 0 && this.grid[id].value == 1) {
+        const { value } = this.grid[id];
+        
+        if (this.previousGrid[id].value == 0 && value == 1 || value == -1) {
           return '';
-        } else if (this.grid[id].value > 0) {
-          return this.grid[id].value;
         }
-      },
-      getAnimations(id) {
-        if (this.previousGrid[id].value != this.grid[id].value) {
-          return this.grid[id].value == 0 ? 'animation-dissapear' : 'animation-merge';
-        }
-
-        return '';
+        return value;
       },
       getBlockClass(prevValue, value) {
         if (prevValue == 0 && value == 1) {
-          return "bg-empty";
-        }
-        
-        let backgroundColor = "bg-empty";
-        if (value == 1) {
-          backgroundColor = "bg-primary";
+          return "display-none";
+        } else if (value == 1) {
+          return "bg-primary";
         } else if (value > 1) {
-          backgroundColor = `bg-block${value}`;
+          return `bg-block${value}`;
         } else if (value == - 1) {
-          backgroundColor = `bg-obstacle`;
+          return `bg-obstacle`;
         }
 
-        return backgroundColor;
+        return "bg-empty";
       },
     },
     props: ['grid', 'previousGrid'],
